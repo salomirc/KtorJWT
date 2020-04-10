@@ -3,23 +3,29 @@ package com.belsoft
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import com.belsoft.routes.authenticate
-import com.belsoft.routes.root
-import com.belsoft.routes.rootPost
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
-import io.ktor.routing.*
-import io.ktor.http.*
-import io.ktor.content.*
-import io.ktor.http.content.*
-import io.ktor.features.*
-import io.ktor.server.engine.*
+import com.belsoft.routes.*
+import com.belsoft.utils.localPath
+import io.ktor.application.Application
+import io.ktor.application.call
+import io.ktor.application.install
 import io.ktor.auth.*
 import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.jwt.jwt
-import io.ktor.gson.*
+import io.ktor.features.CallLogging
+import io.ktor.features.ContentNegotiation
+import io.ktor.features.DefaultHeaders
+import io.ktor.features.StatusPages
+import io.ktor.gson.gson
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
+import io.ktor.response.respond
+import io.ktor.response.respondText
+import io.ktor.routing.get
+import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
+import java.io.File
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -50,6 +56,7 @@ fun Application.module(testing: Boolean = false) {
     println("token = $token")
 
     install(Authentication) {
+        //BasicAuth
         basic("myBasicAuth") {
             this.realm = realm
             validate {
@@ -63,8 +70,9 @@ fun Application.module(testing: Boolean = false) {
             }
         }
 
+        //JWT Auth
         val jwtVerifier = makeJwtVerifier(issuer, audience)
-        jwt {
+        jwt("myJWTAuth") {
             verifier(jwtVerifier)
             this.realm = realm
             validate { credential ->
@@ -76,6 +84,12 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
+    install(StatusPages) {
+        exception<Throwable> { e ->
+            call.respondText(e.localizedMessage, ContentType.Text.Plain, HttpStatusCode.InternalServerError)
+        }
+    }
+
     install(ContentNegotiation) {
         gson {
             setPrettyPrinting()
@@ -83,37 +97,30 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
+    install(DefaultHeaders) {
+        header("X-Engine", "Ktor") // will send this header with each response
+    }
+
+    install(CallLogging)
+
     routing {
         // Static feature. Try to access `/static/ktor_logo.svg`
         static("/static") {
             resources("static")
         }
 
-        install(StatusPages) {
-            exception<Throwable> { e ->
-                call.respondText(e.localizedMessage, ContentType.Text.Plain, HttpStatusCode.InternalServerError)
-            }
-        }
-
+        //Basic Auth
         authenticate("myBasicAuth") {
-            get("/login") {
-                val principal = call.principal<UserIdPrincipal>()!!
-                call.respondText("Hello ${principal.name} the token is : $token")
-            }
+            login(token)
         }
 
-        authenticate {
-            route("/who") {
-                handle {
-                    val principal = call.authentication.principal<JWTPrincipal>()
-                    val subjectString = principal!!.payload.subject.removePrefix("auth0|")
-                    call.respondText("Success, $subjectString")
-                }
-            }
-
-            get("/json") {
-                call.respond(mapOf("hello" to "world"))
-            }
+        //JWT AUth
+        authenticate("myJWTAuth") {
+            who()
+            json()
+            getStaticFilesName()
+            getPrivateFilesName()
+            getFileAsByteArray()
         }
 
         root()
