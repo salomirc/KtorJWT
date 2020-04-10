@@ -3,9 +3,11 @@ package com.belsoft.routes
 import com.belsoft.utils.localPath
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
+import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.get
+import io.ktor.routing.post
 import io.ktor.util.pipeline.PipelineContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -45,10 +47,26 @@ suspend fun listPathFiles(path: String, pipelineContext: PipelineContext<Unit, A
 fun Route.getFileAsByteArray(){
     get("/getFile/{fileName}"){
         val fileName = call.parameters["fileName"]
-        val filesPath = "$localPath/resources/files/$fileName"
-        val encoded = withContext(Dispatchers.IO){
-            Files.readAllBytes(Paths.get(filesPath))
-        }
+        val encoded = fileToByteArray(fileName)
         call.respond(encoded)
+    }
+}
+
+suspend fun fileToByteArray(fileName: String?): ByteArray {
+    val filesPath = "$localPath/resources/files/$fileName"
+    return withContext(Dispatchers.IO){
+        Files.readAllBytes(Paths.get(filesPath))
+    }
+}
+
+fun Route.postFilesNamesArray(){
+    post("/postFilesName"){
+        val files = call.receive<List<String>>()
+        val filesByteArray = mutableListOf<ByteArray>()
+        for (file in files){
+            val encoded = fileToByteArray(file)
+            filesByteArray.add(encoded)
+        }
+        call.respond(filesByteArray)
     }
 }

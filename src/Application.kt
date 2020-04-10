@@ -121,6 +121,7 @@ fun Application.module(testing: Boolean = false) {
             getStaticFilesName()
             getPrivateFilesName()
             getFileAsByteArray()
+            postFilesNamesArray()
         }
 
         root()
