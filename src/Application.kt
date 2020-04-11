@@ -3,12 +3,15 @@ package com.belsoft
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.belsoft.db.*
 import com.belsoft.routes.*
-import com.belsoft.utils.localPath
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
-import io.ktor.auth.*
+import io.ktor.auth.Authentication
+import io.ktor.auth.UserIdPrincipal
+import io.ktor.auth.authenticate
+import io.ktor.auth.basic
 import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.CallLogging
@@ -20,12 +23,13 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
-import io.ktor.response.respond
 import io.ktor.response.respondText
-import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
-import java.io.File
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -47,6 +51,16 @@ private fun makeJwtVerifier(issuer: String, audience: String): JWTVerifier = JWT
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
+
+//    Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver", user = "slx", password = "redhatslx")
+
+    Database.connect("jdbc:mysql://localhost:3306/saloxDb?autoReconnect=true&useSSL=false", driver = "com.mysql.jdbc.Driver",
+        user = "slx", password = "redhatslx")
+
+    transaction {
+        addLogger(StdOutSqlLogger)
+        initDSLdb()
+    }
 
     val issuer = environment.config.property("jwt.domain").getString()
     val audience = environment.config.property("jwt.audience").getString()
