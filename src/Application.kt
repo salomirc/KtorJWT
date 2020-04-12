@@ -59,7 +59,8 @@ fun Application.module(testing: Boolean = false) {
 
     transaction {
         addLogger(StdOutSqlLogger)
-        initDSLdb()
+//        initDSLdb()
+        initDSLStartWarsDb()
     }
 
     val issuer = environment.config.property("jwt.domain").getString()
@@ -136,6 +137,7 @@ fun Application.module(testing: Boolean = false) {
             getPrivateFilesName()
             getFileAsByteArray()
             postFilesNamesArray()
+            startWarsFilms()
         }
 
         root()

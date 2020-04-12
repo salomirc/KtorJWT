@@ -17,7 +17,7 @@ object Cities : Table() {
     override val primaryKey = PrimaryKey(id, name = "PK_Cities_ID")
 }
 
-fun Transaction.initDSLdb(){
+fun Transaction.initDSLdb() {
     SchemaUtils.drop (Users, Cities)
     SchemaUtils.create (Cities, Users)
 
@@ -110,5 +110,5 @@ fun Transaction.initDSLdb(){
         }
     }
 
-//    SchemaUtils.drop (Users, Cities)
+    SchemaUtils.drop (Users, Cities)
 }
