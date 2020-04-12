@@ -3,12 +3,16 @@ package com.belsoft.routes
 import com.belsoft.utils.localPath
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
+import io.ktor.http.ContentType
 import io.ktor.request.receive
 import io.ktor.response.respond
+import io.ktor.response.respondOutputStream
 import io.ktor.routing.Route
+import io.ktor.routing.accept
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.util.pipeline.PipelineContext
+import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -68,5 +72,24 @@ fun Route.postFilesNamesArray(){
             filesByteArray.add(encoded)
         }
         call.respond(filesByteArray)
+    }
+}
+
+fun Route.postFileAsByteArray(){
+    post("/postFileAsByteArray/{fileName}"){
+        val fileName = call.parameters["fileName"]
+        val fileAsByteArray = call.receive<ByteArray>()
+        val filesPath = "$localPath/resources/files/$fileName"
+        val file = File(filesPath)
+        val result = withContext(Dispatchers.IO){
+            if (file.createNewFile()){
+                file.writeBytes(fileAsByteArray)
+                true
+            }
+            else{
+                false
+            }
+        }
+        call.respond(mapOf("success" to result))
     }
 }

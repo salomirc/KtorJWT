@@ -137,6 +137,7 @@ fun Application.module(testing: Boolean = false) {
             getPrivateFilesName()
             getFileAsByteArray()
             postFilesNamesArray()
+            postFileAsByteArray()
             startWarsFilms()
         }
 
