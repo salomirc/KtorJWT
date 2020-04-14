@@ -21,6 +21,7 @@ import io.ktor.features.StatusPages
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.files
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.response.respondText
@@ -122,6 +123,7 @@ fun Application.module(testing: Boolean = false) {
         // Static feature. Try to access `/static/ktor_logo.svg`
         static("/static") {
             resources("static")
+            files("resources/css")
         }
 
         //Basic Auth
@@ -143,6 +145,7 @@ fun Application.module(testing: Boolean = false) {
 
         root()
         rootPost()
+        rootHTML()
     }
 }
 

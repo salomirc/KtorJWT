@@ -12,12 +12,9 @@ object StarWarsFilms: Table() {
 }
 
 data class StarWarsFilm(
+    val id: Int? = null,
     val name: String? = null,
     val director: String? = null
-)
-
-data class IdResponse(
-    val id: Int
 )
 
 fun Transaction.initDSLStartWarsDb() {
@@ -34,6 +31,7 @@ fun Transaction.initDSLStartWarsDb() {
     val allFilms = StarWarsFilms.
         selectAll().map {
             StarWarsFilm(
+                it[StarWarsFilms.id],
                 it[StarWarsFilms.name],
                 it[StarWarsFilms.director]
             )

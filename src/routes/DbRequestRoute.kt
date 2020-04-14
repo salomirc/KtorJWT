@@ -1,6 +1,5 @@
 package com.belsoft.routes
 
-import com.belsoft.db.IdResponse
 import com.belsoft.db.StarWarsFilm
 import com.belsoft.db.StarWarsFilms
 import io.ktor.application.call
@@ -20,6 +19,7 @@ fun Route.startWarsFilms(){
              selectAll().
              map {
                 StarWarsFilm(
+                    it[StarWarsFilms.id],
                     it[StarWarsFilms.name],
                     it[StarWarsFilms.director]
                 )
@@ -36,6 +36,6 @@ fun Route.startWarsFilms(){
                 it[director] = request.director
             } get(StarWarsFilms.id)
         }
-        call.respond(IdResponse(id))
+        call.respond(mapOf("id" to id))
     }
 }

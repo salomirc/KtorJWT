@@ -1,0 +1,9 @@
+body {
+  background-color: powderblue;
+}
+h1#page_title {
+  color: blue;
+}
+p.subtitle {
+  color: red;
+}

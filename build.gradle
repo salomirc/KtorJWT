@@ -45,6 +45,8 @@ dependencies {
     //added
 //    compile 'org.jetbrains.exposed:exposed:0.17.6'
 
+    implementation "io.ktor:ktor-html-builder:$ktor_version"
+
     compile("mysql:mysql-connector-java:5.1.46")
 
     compile 'org.jetbrains.exposed:exposed-core:0.23.1'
