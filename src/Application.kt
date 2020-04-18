@@ -14,10 +14,7 @@ import io.ktor.auth.authenticate
 import io.ktor.auth.basic
 import io.ktor.auth.jwt.JWTPrincipal
 import io.ktor.auth.jwt.jwt
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.DefaultHeaders
-import io.ktor.features.StatusPages
+import io.ktor.features.*
 import io.ktor.gson.gson
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -121,6 +118,9 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(CallLogging)
+    install(HttpsRedirect) {
+                sslPort = 8890
+            }
 
     routing {
         // Static feature. Try to access `/static/ktor_logo.svg`
