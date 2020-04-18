@@ -26,9 +26,9 @@ fun main(args: Array<String>) {
             }
             install(DefaultHeaders)
             install(CallLogging)
-            install(HttpsRedirect) {
-                sslPort = 443
-            }
+//            install(HttpsRedirect) {
+//                sslPort = 443
+//            }
             routing {
                 get("/") {
                     call.respondText("HELLO!")
