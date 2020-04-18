@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
             install(DefaultHeaders)
             install(CallLogging)
 //            install(HttpsRedirect) {
-//                sslPort = 443
+//                sslPort = 8890
 //            }
             routing {
                 get("/") {
@@ -38,11 +38,11 @@ fun main(args: Array<String>) {
 
         connector {
             this.port = 8889
-            this.host = "34.66.48.12"
+            this.host = "0.0.0.0"
         }
         sslConnector(LetsEncryptCerts.keyStore, LetsEncryptCerts.alias, { charArrayOf() }, { charArrayOf() }) {
             this.port = 8890
-            this.host = "34.66.48.12"
+            this.host = "0.0.0.0"
         }
     }) {
         // Netty config
