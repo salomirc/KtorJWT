@@ -26,6 +26,8 @@ import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.response.respondText
 import io.ktor.routing.routing
+import io.ktor.server.engine.connector
+import io.ktor.server.engine.sslConnector
 import io.ktor.util.KtorExperimentalAPI
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.StdOutSqlLogger
@@ -121,6 +123,12 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(CallLogging)
+
+    install(LetsEncrypt) {
+        email = "ciprian.salomir@gmail.com"
+        setProduction()
+        addDomainSet("belsoft.cf")
+    }
 
     routing {
         // Static feature. Try to access `/static/ktor_logo.svg`
