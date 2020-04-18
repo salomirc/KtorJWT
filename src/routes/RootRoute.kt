@@ -2,6 +2,7 @@ package com.belsoft.routes
 
 import com.belsoft.db.StarWarsFilm
 import com.belsoft.db.StarWarsFilms
+import com.belsoft.templates.crudCreateTableTemplate
 import io.ktor.application.call
 import io.ktor.html.respondHtml
 import io.ktor.http.ContentType
@@ -32,33 +33,25 @@ fun Routing.rootPost(){
 }
 
 fun Routing.rootHTML(){
-    get("/html"){
+    get("/admin/StarWarsFilms"){
         val allFilms = transaction {
             StarWarsFilms.
             selectAll().
             map {
-                StarWarsFilm(
-                    it[StarWarsFilms.id],
-                    it[StarWarsFilms.name],
-                    it[StarWarsFilms.director]
+                mapOf(
+                    "id" to it[StarWarsFilms.id].toString(),
+                    "name" to it[StarWarsFilms.name].toString(),
+                    "director" to it[StarWarsFilms.director].toString()
                 )
             }
         }
         call.respondHtml(){
-            head {
-                title { +"StarWars films list from Db" }
-                styleLink("/static/style.css")
-            }
-            body {
-                h1() { id="page_title"
-                    +"Title"
-                }
-                for (film in allFilms){
-                    p("subtitle") {
-                        +"#${film.id} ${film.name} ${film.director}"
-                    }
-                }
-            }
+            crudCreateTableTemplate(
+                "StarWars films list",
+                "StarWarsFilms",
+                allFilms
+            )
         }
     }
 }
+

@@ -34,6 +34,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
+lateinit var baseURL: String
 
 private val algorithm = Algorithm.HMAC256("secret")
 fun makeToken(issuer: String, audience: String): String = JWT.create()
@@ -63,6 +64,8 @@ fun Application.module(testing: Boolean = false) {
 //        initDSLdb()
         initDSLStartWarsDb()
     }
+
+    baseURL = environment.config.property("base.baseURL").getString()
 
     val issuer = environment.config.property("jwt.domain").getString()
     val audience = environment.config.property("jwt.audience").getString()
