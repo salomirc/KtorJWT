@@ -2,6 +2,8 @@ package com.belsoft
 
 import io.ktor.application.*
 import io.ktor.features.CallLogging
+import io.ktor.features.DefaultHeaders
+import io.ktor.features.HttpsRedirect
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
@@ -22,7 +24,11 @@ fun main(args: Array<String>) {
                 setProduction()
                 addDomainSet("belsoft.cf")
             }
+            install(DefaultHeaders)
             install(CallLogging)
+            install(HttpsRedirect) {
+                sslPort = 8890
+            }
             routing {
                 get("/") {
                     call.respondText("HELLO!")
@@ -32,11 +38,11 @@ fun main(args: Array<String>) {
 
         connector {
             this.port = 8889
-            this.host = "0.0.0.0"
+            this.host = "34.66.48.12"
         }
         sslConnector(LetsEncryptCerts.keyStore, LetsEncryptCerts.alias, { charArrayOf() }, { charArrayOf() }) {
             this.port = 8890
-            this.host = "0.0.0.0"
+            this.host = "34.66.48.12"
         }
     }) {
         // Netty config

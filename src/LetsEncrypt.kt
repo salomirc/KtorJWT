@@ -186,11 +186,11 @@ class LetsEncrypt(val config: Configuration) {
                 }
             }
 
-            val domainSet = config.domains.first()
+            val myDomainSet = config.domains.first()
 
-            val cert = loadPublicX509(domainSet.crtFile.readBytes())
+            val cert = loadPublicX509(myDomainSet.crtFile.readBytes())
             //val privateKey = loadPrivateKey(domainSet.csrFile.readBytes())
-            val privateKey = keyPair(domainSet.keyFile.readBytes()).private
+            val privateKey = keyPair(myDomainSet.keyFile.readBytes()).private
 
             val keyStore = LetsEncryptCerts.keyStore
 
