@@ -12,7 +12,7 @@ fun HTML.crudCreateTableTemplate(title: String, pathParam: String, data: List<Ma
         h1("page_title"){
             + "Index"
         }
-        a(href = "$baseURL/admin/$pathParam/create", classes = "blue_button_link"){
+        a(href = "/admin/$pathParam/create", classes = "blue_button_link"){
             + "Create New"
         }
         div("space30px"){
@@ -31,15 +31,15 @@ fun HTML.crudCreateTableTemplate(title: String, pathParam: String, data: List<Ma
                             td { +v}
                         }
                         td {
-                            a("$baseURL/admin/$pathParam/edit/${items["id"]}", classes = "crud_link"){
+                            a("admin/$pathParam/edit/${items["id"]}", classes = "crud_link"){
                                 +"Edit"
                             }
                             +" | "
-                            a("$baseURL/admin/$pathParam/details/${items["id"]}", classes = "crud_link"){
+                            a("/admin/$pathParam/details/${items["id"]}", classes = "crud_link"){
                                 +"Details"
                             }
                             +" | "
-                            a("$baseURL/admin/$pathParam/delete/${items["id"]}", classes = "crud_link"){
+                            a("/admin/$pathParam/delete/${items["id"]}", classes = "crud_link"){
                                 +"Delete"
                             }
                         }
