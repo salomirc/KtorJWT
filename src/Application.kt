@@ -133,16 +133,14 @@ fun Application.module(testing: Boolean = false) {
         authenticate("myBasicAuth") {
             login(token)
             getPrivateFilesName()
+            getStaticFilesName()
+            getFileAsByteArray()
         }
 
         //JWT AUth
         authenticate("myJWTAuth") {
             who()
             json()
-            getStaticFilesName()
-            getPrivateFilesName()
-            getPrivateFilesName()
-            getFileAsByteArray()
             postFilesNamesArray()
             postFileAsByteArray()
             startWarsFilms()
