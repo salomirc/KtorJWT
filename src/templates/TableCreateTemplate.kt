@@ -31,7 +31,7 @@ fun HTML.crudCreateTableTemplate(title: String, pathParam: String, data: List<Ma
                             td { +v}
                         }
                         td {
-                            a("admin/$pathParam/edit/${items["id"]}", classes = "crud_link"){
+                            a("/admin/$pathParam/edit/${items["id"]}", classes = "crud_link"){
                                 +"Edit"
                             }
                             +" | "
