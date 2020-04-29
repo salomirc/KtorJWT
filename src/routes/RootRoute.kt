@@ -1,6 +1,5 @@
 package com.belsoft.routes
 
-import com.belsoft.db.StarWarsFilm
 import com.belsoft.db.StarWarsFilms
 import com.belsoft.templates.crudCreateTableTemplate
 import io.ktor.application.call
@@ -12,7 +11,6 @@ import io.ktor.response.respondText
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.routing.post
-import kotlinx.html.*
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 

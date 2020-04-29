@@ -24,9 +24,7 @@ import io.ktor.http.content.static
 import io.ktor.response.respondText
 import io.ktor.routing.routing
 import io.ktor.util.KtorExperimentalAPI
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -53,13 +51,17 @@ fun Application.module(testing: Boolean = false) {
 
 //    Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver", user = "slx", password = "redhatslx")
 
-    Database.connect("jdbc:mysql://localhost:3306/saloxDb?autoReconnect=true&useSSL=false", driver = "com.mysql.jdbc.Driver",
+//    Database.connect("jdbc:mysql://localhost:3306/saloxDb?autoReconnect=true&useSSL=false", driver = "com.mysql.jdbc.Driver",
+//        user = "slx", password = "redhatslx")
+
+    Database.connect("jdbc:mysql://localhost:3306/cosulBioDb?autoReconnect=true&useSSL=false", driver = "com.mysql.jdbc.Driver",
         user = "slx", password = "redhatslx")
 
     transaction {
         addLogger(StdOutSqlLogger)
 //        initDSLdb()
-        initDSLStartWarsDb()
+//        initDSLStartWarsDb()
+        initDSLCosulBioDb()
     }
 
     baseURL = environment.config.property("base.baseURL").getString()
@@ -75,14 +77,16 @@ fun Application.module(testing: Boolean = false) {
         //BasicAuth
         basic("myBasicAuth") {
             this.realm = realm
-            validate {
-                if (
-                    when {
-                        it.name == "test" && it.password == "password" -> true
-                        it.name == "salox" && it.password == "redhat" -> true
-                        else -> false
+            validate { auth ->
+                val users = transaction {
+                    Users.
+                    select { Users.username eq auth.name and(Users.password eq auth.password) }.
+                    map {
+                        it[Users.username]
                     }
-                ) UserIdPrincipal(it.name) else null
+                }
+                if (users.isNotEmpty())
+                    UserIdPrincipal(auth.name) else null
             }
         }
 
@@ -118,9 +122,9 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(CallLogging)
-    install(HttpsRedirect) {
-                sslPort = 443
-            }
+//    install(HttpsRedirect) {
+//                sslPort = 443
+//            }
 
     routing {
         // Static feature. Try to access `/static/ktor_logo.svg`

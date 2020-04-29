@@ -1,6 +1,5 @@
 package com.belsoft.db
 
-import com.belsoft.db.Cities.autoIncrement
 import org.jetbrains.exposed.sql.*
 
 object StarWarsFilms: Table() {
@@ -8,7 +7,7 @@ object StarWarsFilms: Table() {
     val name: Column<String?> = varchar("name", 50).nullable()
     val director: Column<String?> = varchar("director", 50).nullable()
 
-    override val primaryKey = PrimaryKey(Users.id)
+    override val primaryKey = PrimaryKey(id)
 }
 
 data class StarWarsFilm(
@@ -21,20 +20,20 @@ fun Transaction.initDSLStartWarsDb() {
 //    SchemaUtils.drop(StarWarsFilms)
     SchemaUtils.create(StarWarsFilms)
 
-    //CREATE
-    val id = StarWarsFilms.insert {
-        it[name] = "The Last Jedi"
-        it[director] = "Rian Johnson"
-    } get(StarWarsFilms.id)
-
-    //READ
-    val allFilms = StarWarsFilms.
-        selectAll().map {
-            StarWarsFilm(
-                it[StarWarsFilms.id],
-                it[StarWarsFilms.name],
-                it[StarWarsFilms.director]
-            )
-        }
-    println("All films : $allFilms")
+//    //CREATE
+//    val id = StarWarsFilms.insert {
+//        it[name] = "The Last Jedi"
+//        it[director] = "Rian Johnson"
+//    } get(StarWarsFilms.id)
+//
+//    //READ
+//    val allFilms = StarWarsFilms.
+//        selectAll().map {
+//            StarWarsFilm(
+//                it[StarWarsFilms.id],
+//                it[StarWarsFilms.name],
+//                it[StarWarsFilms.director]
+//            )
+//        }
+//    println("All films : $allFilms")
 }
