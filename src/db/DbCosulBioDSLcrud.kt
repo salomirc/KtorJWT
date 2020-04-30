@@ -1,11 +1,13 @@
 package com.belsoft.db
 
+import io.netty.handler.ipfilter.UniqueIpFilter
 import org.jetbrains.exposed.sql.*
+import javax.swing.SpringLayout
 
 object Users: Table() {
     val id = integer("id").autoIncrement()
-    val username: Column<String> = varchar("username", 50)
-    val password: Column<String> = varchar("password", 50)
+    val username: Column<String> = varchar("username", 50).uniqueIndex()
+    val password: Column<String> = varchar("password", 50).uniqueIndex()
     val firstName: Column<String> = varchar("first_name", 50)
     val lastName: Column<String> = varchar("last_name", 50)
     val email: Column<String> = varchar("email", 50)
@@ -26,6 +28,7 @@ data class User(
 )
 
 fun Transaction.initDSLCosulBioDb() {
+//    SchemaUtils.drop(Users)
     SchemaUtils.create(Users)
 
     //CREATE

@@ -51,9 +51,6 @@ fun Application.module(testing: Boolean = false) {
 
 //    Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver", user = "slx", password = "redhatslx")
 
-//    Database.connect("jdbc:mysql://localhost:3306/saloxDb?autoReconnect=true&useSSL=false", driver = "com.mysql.jdbc.Driver",
-//        user = "slx", password = "redhatslx")
-
     Database.connect("jdbc:mysql://localhost:3306/cosulBioDb?autoReconnect=true&useSSL=false", driver = "com.mysql.jdbc.Driver",
         user = "slx", password = "redhatslx")
 
