@@ -29,11 +29,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
-lateinit var baseURL: String
 
-private val algorithm = Algorithm.HMAC256("secret")
-fun makeToken(issuer: String, audience: String): String = JWT.create()
-    .withSubject("Authentication")
+private val algorithm = Algorithm.HMAC256("maca")
+fun makeToken(issuer: String, audience: String, subject: String): String = JWT.create()
+    .withSubject(subject)
     .withAudience(audience)
     .withIssuer(issuer)
     .sign(algorithm)
@@ -56,19 +55,13 @@ fun Application.module(testing: Boolean = false) {
 
     transaction {
         addLogger(StdOutSqlLogger)
-//        initDSLdb()
-//        initDSLStartWarsDb()
         initDSLCosulBioDb()
     }
-
-    baseURL = environment.config.property("base.baseURL").getString()
 
     val issuer = environment.config.property("jwt.domain").getString()
     val audience = environment.config.property("jwt.audience").getString()
     val realm = environment.config.property("jwt.realm").getString()
 
-    val token = makeToken(issuer, audience)
-    println("token = $token")
 
     install(Authentication) {
         //BasicAuth
@@ -132,7 +125,7 @@ fun Application.module(testing: Boolean = false) {
 
         //Basic Auth
         authenticate("myBasicAuth") {
-            login(token)
+            login(issuer, audience)
             getPrivateFilesName()
             getStaticFilesName()
             getFileAsByteArray()

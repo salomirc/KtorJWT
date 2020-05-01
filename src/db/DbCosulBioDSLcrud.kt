@@ -1,8 +1,6 @@
 package com.belsoft.db
 
-import io.netty.handler.ipfilter.UniqueIpFilter
 import org.jetbrains.exposed.sql.*
-import javax.swing.SpringLayout
 
 object Users: Table() {
     val id = integer("id").autoIncrement()

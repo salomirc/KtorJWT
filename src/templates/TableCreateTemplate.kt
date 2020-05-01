@@ -1,6 +1,5 @@
 package com.belsoft.templates
 
-import com.belsoft.baseURL
 import kotlinx.html.*
 
 fun HTML.crudCreateTableTemplate(title: String, pathParam: String, data: List<Map<String, String>>){
