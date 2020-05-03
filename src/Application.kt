@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import com.belsoft.db.*
+import com.belsoft.models.Users
 import com.belsoft.routes.*
 import io.ktor.application.Application
 import io.ktor.application.call

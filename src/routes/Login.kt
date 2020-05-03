@@ -1,8 +1,8 @@
 package com.belsoft.routes
 
-import com.belsoft.db.User
-import com.belsoft.db.Users
 import com.belsoft.makeToken
+import com.belsoft.models.User
+import com.belsoft.models.Users
 import io.ktor.application.call
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.principal
