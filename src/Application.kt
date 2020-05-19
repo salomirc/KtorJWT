@@ -122,6 +122,7 @@ fun Application.module(testing: Boolean = false) {
         static("/static") {
             resources("static")
             files("resources/css")
+            files("resources/files")
         }
 
         //Basic Auth
