@@ -113,9 +113,9 @@ fun Application.module(testing: Boolean = false) {
     }
 
     install(CallLogging)
-//    install(HttpsRedirect) {
-//                sslPort = 443
-//            }
+    install(HttpsRedirect) {
+                sslPort = 443
+            }
 
     routing {
         // Static feature. Try to access `/static/ktor_logo.svg`
