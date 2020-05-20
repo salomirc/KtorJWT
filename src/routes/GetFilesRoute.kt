@@ -55,7 +55,6 @@ fun Route.getFileAsByteArray(){
 suspend fun fileToByteArray(fileName: String?): ByteArray {
     val filesPath = "$localPath/resources/files/$fileName"
     return withContext(Dispatchers.IO){
-//        Files.readAllBytes(Paths.get(filesPath))
         File(filesPath).readBytes()
     }
 }

@@ -128,9 +128,6 @@ fun Application.module(testing: Boolean = false) {
         //Basic Auth
         authenticate("myBasicAuth") {
             login(issuer, audience)
-            getPrivateFilesName()
-            getStaticFilesName()
-            getFileAsByteArray()
         }
 
         //JWT AUth
@@ -139,7 +136,11 @@ fun Application.module(testing: Boolean = false) {
             json()
             postFilesNamesArray()
             postFileAsByteArray()
-            startWarsFilms()
+            getPrivateFilesName()
+            getStaticFilesName()
+            getFileAsByteArray()
+//            startWarsFilms()
+            products()
         }
 
         root()
