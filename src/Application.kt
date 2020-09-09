@@ -140,8 +140,10 @@ fun Application.module(testing: Boolean = false) {
             getStaticFilesName()
             getFileAsByteArray()
 //            startWarsFilms()
-            products()
+//            products()
         }
+
+        products()
 
         root()
         rootPost()
