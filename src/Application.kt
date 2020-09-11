@@ -138,12 +138,13 @@ fun Application.module(testing: Boolean = false) {
             postFileAsByteArray()
             getPrivateFilesName()
             getStaticFilesName()
-            getFileAsByteArray()
+//            getFileAsByteArray()
 //            startWarsFilms()
 //            products()
         }
 
         products()
+        getFileAsByteArray()
 
         root()
         rootPost()

@@ -17,7 +17,7 @@ object Products : Table() {
 }
 
 data class Product(
-    val id: Int? = null,
+    val id: Int,
     val name: String,
     val price: BigDecimal,
     val unit: String,

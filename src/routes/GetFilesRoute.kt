@@ -78,12 +78,12 @@ fun Route.postFileAsByteArray(){
         val filesPath = "$localPath/resources/files/$fileName"
         val file = File(filesPath)
         val result = withContext(Dispatchers.IO){
-            if (file.createNewFile()){
+            if (file.createNewFile()) {
                 file.writeBytes(fileAsByteArray)
-                true
+                return@withContext true
             }
             else{
-                false
+                return@withContext false
             }
         }
         call.respond(mapOf("success" to result))
